@@ -8,6 +8,7 @@ const humanWeight = document.getElementById("weight");
 const humanHeight = document.getElementById("feet");
 const humanDiet = document.getElementById("diet");
 let k = "";
+
 const d = Dinos;
 const dinoDict = [];
 
@@ -18,18 +19,10 @@ const dinoDict = [];
             this.obj = obj;
         }
 
-        /* static createDino() {
-            fetch("dino.json").then(response => {
-                return response.json();
-            }).then(obj => {
-                dinod.Dinos = obj.Dinos;
-                console.log(dinod.Dinos);  
-            })
-        } */
     }
     
     // Create Dino Objects
-    d.Dinos.forEach((e, key) => {
+    d.Dinos.forEach((e) => {
         dinoDict[`${e.species}`] = new Dino(e);
     })
     for(let i in dinoDict){
@@ -94,7 +87,15 @@ const dinoDict = [];
             return count;
         }
     }
-
+    //Function to get a random number within the lenght of the object
+    let randomKey = function(e) {
+        let randomNumber = Math.floor(Math.random()*(Object.keys(e).length-1)+1);
+        
+        return function(){
+            return randomNumber;
+        }
+    }
+    
     // Generate Tiles for each Dino in d.Dinosay
     function generateTiles(){
         let count = 1;
@@ -103,7 +104,9 @@ const dinoDict = [];
             let image = document.createElement("img");
             let dinoName = document.createElement("h3");
             let dinoText = document.createElement("p");
-
+            let k = Object.keys(dinoDict[i].obj)[randomKey(dinoDict[i].obj)()];
+            let upperK = k.charAt(0).toUpperCase() + k.slice(1);
+            
             if(count === 5){
                 image.setAttribute("src", "images/human.png");
                 dinoText.innerHTML = `${weight()()} dinos are heavier than you. ${height()()} dinos are bigger than you. ${diet()()} dinos share the same diet as you.`;
@@ -111,7 +114,6 @@ const dinoDict = [];
                 gridItem.appendChild(dinoName);
                 gridItem.appendChild(image);
                 gridItem.appendChild(dinoText);
-                
                 gridItem.id = "human";
                 grid.appendChild(gridItem).className = "grid-item";
     
@@ -119,7 +121,7 @@ const dinoDict = [];
                 let image2 = document.createElement("img");
                 let dinoName2 = document.createElement("h3");
                 let dinoText2 = document.createElement("p");
-                dinoText2.innerHTML = dinoDict[i].obj["fact"];
+                dinoText2.innerHTML = `${upperK}: ${dinoDict[i].obj[k]}`;
                 
                 dinoName2.innerHTML =  i;
                 image2.setAttribute("src", `images/${i.toLowerCase()}.png`);
@@ -131,7 +133,7 @@ const dinoDict = [];
                 grid.appendChild(gridItem2).className = "grid-item";
             }else{
                 image.setAttribute("src", `images/${i.toLowerCase()}.png`);
-                dinoText.innerHTML = dinoDict[i].obj["fact"];
+                dinoText.innerHTML = `${upperK}: ${dinoDict[i].obj[k]}`;
                 dinoName.innerHTML = i;
                 gridItem.appendChild(dinoName);
                 gridItem.appendChild(image);
